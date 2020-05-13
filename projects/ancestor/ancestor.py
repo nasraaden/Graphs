@@ -22,6 +22,7 @@ def earliest_ancestor(ancestors, starting_node):
     # create a set of traversed vertices
     visited = set()
 
+    # initiate ancestor path with an empty list
     ancestor_path = []
 
     # while stack is not empty:
@@ -30,22 +31,25 @@ def earliest_ancestor(ancestors, starting_node):
         path = stack.pop()
         # if not visited
         if path[-1] not in visited:
-            # compare the size of path
+            # compare the size of current path and ancestor path
+            # if current path is bigger, set ancestor path to current path
             if len(path) > len(ancestor_path):
                 ancestor_path = path
+            # if both paths are the same size, compare the last numbers in both
             if len(path) == len(ancestor_path):
+                # if the last number in path is bigger, set ancestor path to path
                 if path[-1] < ancestor_path[-1]:
                     ancestor_path = path
-                # mark as visted
+            # mark curernt vertex as visted
             visited.add(path[-1])
-            # push all neighbors
+            # check all neighbors
             for vertex in ancestors_graph.get_neighbors(path[-1]):
                 new_path = list(path)
                 new_path.append(vertex)
                 stack.push(new_path)
-
-    print('PATH:', ancestor_path)
+    # if there is only one node in ancestor path, return -1
     if len(ancestor_path) == 1:
         return -1
 
+    # return the earliest ancestor
     return ancestor_path[-1]
